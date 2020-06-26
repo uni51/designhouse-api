@@ -10,7 +10,7 @@ use Grimzy\LaravelMysqlSpatial\Eloquent\SpatialTrait;
 
 class User extends Authenticatable implements JWTSubject
 {
-    use Notifiable, use SpatialTrait;;
+    use Notifiable, SpatialTrait;
 
     /**
      * The attributes that are mass assignable.
