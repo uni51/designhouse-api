@@ -3,14 +3,17 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Models\User;
-use Illuminate\Auth\Events\Verified;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\URL;
 use App\Http\Controllers\Controller;
+use Illuminate\Auth\Events\Verified;
 use App\Providers\RouteServiceProvider;
 //use Illuminate\Foundation\Auth\VerifiesEmails;
 
 class VerificationController extends Controller
 {
+    protected $users;
+
     /**
      * Create a new controller instance.
      *
@@ -23,6 +26,11 @@ class VerificationController extends Controller
     }
 
 
+    /**
+     * @param Request $request
+     * @param User $user
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function verify(Request $request, User $user)
     {
         // check if the url is a valid signed url
@@ -45,9 +53,34 @@ class VerificationController extends Controller
         return response()->json(['message' => 'Email successfully verified'], 200);
     }
 
-
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
     public function resend(Request $request)
     {
+        $this->validate($request, [
+            'email' => ['email', 'required']
+        ]);
 
+         $user = User::where('email', $request->email)->first();
+
+        if(! $user) {
+            return response()->json(["errors" => [
+                "email" => "No user could be found with this email address"
+            ]], 422);
+        }
+
+        // check if the user has already verified account
+        if($user->hasVerifiedEmail()){
+            return response()->json(["errors" => [
+                "messgae" => "Email address already verified"
+            ]], 422);
+        }
+
+        $user->sendEmailVerificationNotification();
+
+        return response()->json(['status' => "verification link resent"]);
     }
 }
