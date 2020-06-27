@@ -6,8 +6,8 @@
 // Route group for authenticated users only
 
 Route::group(['middleware' => ['auth:api']], function(){
+    Route::post('logout', 'Auth\LoginController@logout');
 
-    // --
 });
 
 
