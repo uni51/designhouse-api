@@ -32,6 +32,12 @@ class VerificationController extends Controller
     {
         $user = User::where('id', $request->id)->first();
 
+        if(! $user) {
+            return response()->json(["errors" => [
+                "message" => "No user could be found with this id"
+            ]], 422);
+        }
+
         // check if the url is a valid signed url
         if(! URL::hasValidSignature($request)){
             return response()->json(["errors" => [
