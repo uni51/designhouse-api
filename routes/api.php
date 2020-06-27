@@ -1,7 +1,7 @@
 <?php
 
 // Public routes
-
+Route::get('me', 'User\MeController@getMe');
 
 // Route group for authenticated users only
 
