@@ -12,8 +12,6 @@ use App\Providers\RouteServiceProvider;
 
 class VerificationController extends Controller
 {
-    protected $users;
-
     /**
      * Create a new controller instance.
      *
@@ -21,7 +19,6 @@ class VerificationController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('signed')->only('verify');
         $this->middleware('throttle:6,1')->only('verify', 'resend');
     }
 
@@ -31,12 +28,14 @@ class VerificationController extends Controller
      * @param User $user
      * @return \Illuminate\Http\JsonResponse
      */
-    public function verify(Request $request, User $user)
+    public function verify(Request $request)
     {
+        $user = User::where('id', $request->id)->first();
+
         // check if the url is a valid signed url
         if(! URL::hasValidSignature($request)){
             return response()->json(["errors" => [
-                "messgae" => "Invalid verification link"
+                "messgae" => "Invalid verification link or signature"
             ]], 422); // Laravelの場合、バリデーションエラーは422
         }
 
@@ -64,7 +63,7 @@ class VerificationController extends Controller
             'email' => ['email', 'required']
         ]);
 
-         $user = User::where('email', $request->email)->first();
+        $user = User::where('email', $request->email)->first();
 
         if(! $user) {
             return response()->json(["errors" => [
