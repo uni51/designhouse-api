@@ -19,7 +19,7 @@ class CreateUsersTable extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('tagline')->nullable();
+            $table->string('tagline')->nullable(); // キャッチフレーズ
             $table->text('about')->nullable();
             $table->point('location')->nullable();
             $table->string('formatted_address')->nullable();

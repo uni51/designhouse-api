@@ -15,7 +15,7 @@ class LoginController extends Controller
 
     public function attemptLogin(Request $request)
     {
-        // attempt to issue a token to the user based on the login credentials
+        // ログイン資格情報に基づいてユーザーにトークンを発行しようとする
         $token = $this->guard()->attempt($this->credentials($request));
 
         if( ! $token){
