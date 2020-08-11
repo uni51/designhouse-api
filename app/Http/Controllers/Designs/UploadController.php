@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Designs;
 
+use App\Jobs\UploadImage;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -17,7 +18,7 @@ class UploadController extends Controller
 
         // get the image
         $image = $request->file('image');
-        $image_path = $image->getPathname();
+        $image_path = $image->getPathName();
 
         // get the original file name and replace any spaces with _
         // Business Cards.png = timestamp()_business_cards.png
