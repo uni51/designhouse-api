@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Designs;
 use App\Http\Resources\DesignResource;
 use App\Models\Design;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 
@@ -29,5 +30,23 @@ class DesignController extends Controller
         ]);
 
         return new DesignResource($design);
+    }
+
+    public function destroy($id)
+    {
+        $design = Design::findOrFail($id);
+        $this->authorize('delete', $design);
+
+        // delete the files associated to the record
+        foreach(['thumbnail', 'large', 'original'] as $size){
+            // check if the file exists in the database
+            if(Storage::disk($design->disk)->exists("uploads/designs/{$size}/".$design->image)){
+                Storage::disk($design->disk)->delete("uploads/designs/{$size}/".$design->image);
+            }
+        }
+
+        $design->delete();
+        return response()->json(['message' => 'Record deleted'], 200);
+
     }
 }

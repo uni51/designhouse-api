@@ -54,7 +54,6 @@ class DesignPolicy
     public function update(User $user, Design $design)
     {
         return $design->user_id === $user->id;
-//        return false;
     }
 
     /**
@@ -66,7 +65,7 @@ class DesignPolicy
      */
     public function delete(User $user, Design $design)
     {
-        //
+        return $design->user_id === $user->id;
     }
 
     /**
