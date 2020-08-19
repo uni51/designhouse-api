@@ -2,15 +2,21 @@
 
 namespace App\Http\Controllers\Designs;
 
-use App\Http\Resources\DesignResource;
 use App\Models\Design;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\DesignResource;
+use Illuminate\Support\Facades\Storage;
 
 class DesignController extends Controller
 {
+    public function index()
+    {
+        $designs = Design::all();
+        return DesignResource::collection($designs);
+    }
+
     public function update(Request $request, $id)
     {
         $design = Design::find($id);

@@ -3,8 +3,13 @@
 // Public routes
 Route::get('me', 'User\MeController@getMe');
 
-// Route group for authenticated users only
+// Get designs
+Route::get('designs', 'Designs\DesignController@index');
 
+// Get users
+Route::get('users', 'User\UserController@index');
+
+// Route group for authenticated users only
 Route::group(['middleware' => ['auth:api']], function(){
     Route::post('logout', 'Auth\LoginController@logout');
     Route::put('settings/profile', 'User\SettingsController@updateProfile');
