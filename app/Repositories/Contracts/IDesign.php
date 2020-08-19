@@ -3,5 +3,5 @@ namespace App\Repositories\Contracts;
 
 interface IDesign
 {
-    public function all();
+    public function applyTags($id, array $data);
 }
