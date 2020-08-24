@@ -38,6 +38,5 @@ class ProfileJsonResponse
         }
 
         return $response;
-//        return $next($request);
     }
 }
