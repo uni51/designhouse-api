@@ -32,4 +32,30 @@ class CommentController extends Controller
 
         return new CommentResource($comment);
     }
+
+    public function update(Request $request, $id)
+    {
+        $comment = $this->comments->find($id);
+        $this->authorize('update', $comment); // Policyのチェック
+
+        $this->validate($request, [
+           'body' => ['required']
+        ]);
+
+        $comment = $this->comments->update($id, [
+            'body' => $request->body
+        ]);
+
+        return new CommentResource($comment);
+    }
+
+    public function destroy($id)
+    {
+        $comment = $this->comments->find($id);
+        $this->authorize('delete', $comment); // Policyのチェック
+
+        $this->comments->delete($id);
+
+        return response()->json(['message' => 'Item deleted'], 200);
+    }
 }
