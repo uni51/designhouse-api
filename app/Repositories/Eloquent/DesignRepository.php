@@ -3,6 +3,7 @@ namespace App\Repositories\Eloquent;
 
 use App\Models\Design;
 use App\Repositories\Contracts\IDesign;
+use App\Repositories\Eloquent\BaseRepository;
 
 class DesignRepository extends BaseRepository implements IDesign
 {
@@ -27,5 +28,17 @@ class DesignRepository extends BaseRepository implements IDesign
         $comment = $design->comments()->create($data);
 
         return $comment;
+    }
+
+    public function like($id)
+    {
+        $design = $this->model->findOrFail($id);
+        if($design->isLikedByUser(auth()->id())){
+            $design->unlike();
+        } else {
+            $design->like();
+        }
+
+        return $design->likes()->count();
     }
 };
