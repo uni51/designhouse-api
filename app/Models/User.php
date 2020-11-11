@@ -73,6 +73,28 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
         return $this->hasMany(Comment::class);
     }
 
+    // teams that the user belongs to
+    public function teams()
+    {
+        return $this->belongsToMany(Team::class)
+            ->withTimestamps();
+    }
+
+    public function ownedTeams()
+    {
+        return $this->teams()
+            ->where('owner_id', $this->id);
+    }
+
+    public function isOwnerOfTeam($team)
+    {
+        return (bool)$this->teams()
+            ->where('id', $team->id)
+            ->where('owner_id', $this->id)
+            ->count();
+    }
+
+
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.
      *
